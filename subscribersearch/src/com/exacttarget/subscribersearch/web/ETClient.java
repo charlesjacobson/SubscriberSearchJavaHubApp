@@ -27,7 +27,7 @@ public class ETClient {
 	
 	private Soap soap = null;	
 	private String internalAuthToken = null;
-	private String oauthToken = null;
+	private String stack = null;
 	
 	
 	/**
@@ -108,15 +108,15 @@ public class ETClient {
 	}
 
 
-	public String getOauthToken() {
-		return oauthToken;
+	public String getStack() {
+		return stack;
 	}
 
 
-	public void setOauthToken(String oauthToken) {
-		this.oauthToken = oauthToken;
+	public void setStack(String stack) {
+		this.stack = stack;
 	}
-	
+
 		
 
 }

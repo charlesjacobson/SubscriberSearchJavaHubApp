@@ -47,20 +47,20 @@ public class LoginServlet extends HttpServlet {
 				JSONObject payloadObj = JWTUtil.decode(jwt, PropertiesHelper.getAppProperty("APP_SIGNATURE"));
 				JSONObject requestObj = (JSONObject)payloadObj.get("request");
 				JSONObject userObj = (JSONObject)requestObj.get("user");
-				Object userId = userObj.get("id");
-				Object oauthToken = userObj.get("oauthToken");
+				JSONObject organizationObj = (JSONObject)requestObj.get("organization");
 				Object internalOauthToken = userObj.get("internalOauthToken");
+				Object stackKeyObj = organizationObj.get("stackKey");
 				
+				// Create a SOAP client using the oauth token for authentication
 				ETClient client = new ETClient();
 				System.out.println("internalOauthToken: \n" + internalOauthToken);
 				client.setInternalAuthToken(internalOauthToken.toString());
+				client.setStack(stackKeyObj.toString());
 				Soap soap = client.getSoap();
 				
-				request.getSession().setAttribute("oauthToken", oauthToken);
-				request.getSession().setAttribute("internalOauthToken", internalOauthToken);				
 				request.getSession().setAttribute("soap", soap);
 				
-				response.sendRedirect(request.getContextPath() + "/main?userId=" + userId);
+				response.sendRedirect(request.getContextPath() + "/main");
 				return;
 				
 				

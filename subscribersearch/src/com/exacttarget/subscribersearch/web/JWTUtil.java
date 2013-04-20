@@ -49,6 +49,7 @@ public class JWTUtil {
 			throw new Exception("Bad JWS signature!");
 		}
 
+		System.out.println("*****\n" + jwsObject.getPayload().toString() + "\n*****");
 		return jwsObject.getPayload().toJSONObject();
 
 	}
