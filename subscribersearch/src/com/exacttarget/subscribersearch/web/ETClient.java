@@ -27,8 +27,6 @@ public class ETClient {
 	
 	private Soap soap = null;	
 	private String internalAuthToken = null;
-	private String stack = null;
-	
 	
 	/**
 	 * Get Soap instance to make SOAP calls with ET specific Security headers
@@ -49,6 +47,7 @@ public class ETClient {
 				SOAPFactory sf = SOAPFactory.newInstance();
 
 				SOAPElement oauthTokenEl = sf.createElement(new QName(null, "oAuthToken"));
+				// add in token retrieved at login
 				oauthTokenEl.addTextNode(internalAuthToken);
 				SOAPElement oauthEl = sf.createElement(new QName("http://exacttarget.com", "oAuth"));
 				oauthEl.addChildElement(oauthTokenEl);
@@ -58,6 +57,7 @@ public class ETClient {
 
 				SOAPElement securityEl = sf.createElement(new QName(XSD_URL, "Security"));
 				SOAPElement usernameTokenEl = sf.createElement(new QName(XSD_URL, "UsernameToken"));
+				// use "*" in place of credentials. authentication handled by token
 				SOAPElement usernameEl = sf.createElement(new QName(XSD_URL, "Username"));
 				usernameEl.addTextNode("*");
 				SOAPElement passwordEl = sf.createElement(new QName(XSD_URL, "Password"));
@@ -69,7 +69,7 @@ public class ETClient {
 				Header tokenHeader = new Header(new QName(XSD_URL, "Security"), securityEl);
 				headers.add(tokenHeader);
 
-				client.getRequestContext().put(Header.HEADER_LIST, headers);
+				client.getRequestContext().put(Header.HEADER_LIST, headers);				
 				client.getRequestContext().put(Message.ENDPOINT_ADDRESS, PropertiesHelper.getAppProperty("SOAP_ENDPOINT"));
 				client.getRequestContext().put(Message.ENCODING, "UTF-8");
 
@@ -86,7 +86,8 @@ public class ETClient {
 				tlsClientParameters.setCipherSuitesFilter(filters);
 				this.soap = stub;
 			} catch (Exception e) {
-				System.out.println("Exception was thrown:");
+				e.printStackTrace();
+				System.out.println("Exception was thrown: " + e.getMessage());
 			}
 		}
 		return this.soap;
@@ -106,17 +107,6 @@ public class ETClient {
 	public void setSoap(Soap soap) {
 		this.soap = soap;
 	}
-
-
-	public String getStack() {
-		return stack;
-	}
-
-
-	public void setStack(String stack) {
-		this.stack = stack;
-	}
-
-		
+	
 
 }

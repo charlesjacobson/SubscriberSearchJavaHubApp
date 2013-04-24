@@ -1,6 +1,5 @@
 package com.exacttarget.subscribersearch.web;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
@@ -14,9 +13,7 @@ public class PropertiesHelper {
 	static {
 		
 		try {
-			APP_PROPS = new Properties();
-			//FileInputStream in = new FileInputStream(APP_PROPERTIES_PATH);
-			
+			APP_PROPS = new Properties();			
 			APP_PROPS.load(PropertiesHelper.class.getResourceAsStream(APP_PROPERTIES_PATH));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

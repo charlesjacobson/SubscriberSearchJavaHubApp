@@ -47,15 +47,11 @@ public class LoginServlet extends HttpServlet {
 				JSONObject payloadObj = JWTUtil.decode(jwt, PropertiesHelper.getAppProperty("APP_SIGNATURE"));
 				JSONObject requestObj = (JSONObject)payloadObj.get("request");
 				JSONObject userObj = (JSONObject)requestObj.get("user");
-				JSONObject organizationObj = (JSONObject)requestObj.get("organization");
 				Object internalOauthToken = userObj.get("internalOauthToken");
-				Object stackKeyObj = organizationObj.get("stackKey");
 				
 				// Create a SOAP client using the oauth token for authentication
 				ETClient client = new ETClient();
-				System.out.println("internalOauthToken: \n" + internalOauthToken);
 				client.setInternalAuthToken(internalOauthToken.toString());
-				client.setStack(stackKeyObj.toString());
 				Soap soap = client.getSoap();
 				
 				request.getSession().setAttribute("soap", soap);
@@ -66,17 +62,13 @@ public class LoginServlet extends HttpServlet {
 				
 			} catch (Exception e) {
 				e.printStackTrace();
-				//response.getWriter().print("Unable to decode JWT");
-				request.setAttribute("msg", "Unable to decode JWT");
+				response.getWriter().print("Unable to decode security token");
 				
 			}
 		} else {
-			request.setAttribute("msg", "NO JWT provided");
+			response.getWriter().print("No token provided");
 			
 		}
-		
-		getServletContext().getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
-		
 	}
 
 }

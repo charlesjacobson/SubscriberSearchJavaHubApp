@@ -35,10 +35,8 @@ public class LogoutServlet extends HttpServlet {
 	}
 	
 	protected void doWork(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getSession().removeAttribute("internalOauthToken");
-		request.getSession().removeAttribute("oauthToken");
 		request.getSession().removeAttribute("soap");
-		getServletContext().getRequestDispatcher("/WEB-INF/jsp/logout.jsp").forward(request, response);
+		response.getWriter().print("Successfully logged out");
 	}
 
 }

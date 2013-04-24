@@ -1,7 +1,9 @@
 package com.exacttarget.subscribersearch.web;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,10 +17,8 @@ import com.exacttarget.wsdl.partnerapi.SubscriberStatus;
 import com.exacttarget.wsdl.partnerapi.UpdateOptions;
 import com.exacttarget.wsdl.partnerapi.UpdateRequest;
 import com.exacttarget.wsdl.partnerapi.UpdateResponse;
+import com.exacttarget.wsdl.partnerapi.UpdateResult;
 
-/**
- * Servlet implementation class Update
- */
 public class SubscriberUpdateServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -36,13 +36,9 @@ public class SubscriberUpdateServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String id = request.getParameter("id");
-
         String status = request.getParameter("status");
 
-        //
-        // Get the soap handle from the servlet context:
-        //
-
+        // get the soap handle from the session
         Soap soap = (Soap) request.getSession().getAttribute("soap");
 
         Subscriber subscriber = new Subscriber();
@@ -64,7 +60,21 @@ public class SubscriberUpdateServlet extends HttpServlet {
         updateRequest.setOptions(updateOptions);
 
         UpdateResponse updateResponse = soap.update(updateRequest);
-		
+        List<UpdateResult> results = updateResponse.getResults();
+        
+        String result = "{\"success\":\"true\"}";
+        
+        if (results == null || 
+        		results.size() < 1 || 
+        		!results.get(0).getStatusCode().equalsIgnoreCase("OK")) {
+        	
+        	result.replace("true", "false");
+        }
+        
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        out.println(result);        
+        
 	}
 
 	/**

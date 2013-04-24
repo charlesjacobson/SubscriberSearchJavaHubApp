@@ -39,7 +39,7 @@ public class JWTUtil {
 
 		} catch (JOSEException e) {
 
-			System.err.println("Couldn't verify signature: " + e.getMessage());
+			System.err.println("Couldn't verify JWS signature: " + e.getMessage());
 		}
 
 		if (verifiedSignature) {
@@ -49,7 +49,8 @@ public class JWTUtil {
 			throw new Exception("Bad JWS signature!");
 		}
 
-		System.out.println("*****\n" + jwsObject.getPayload().toString() + "\n*****");
+		System.out.println("Decrypted token contents:\n" + jwsObject.getPayload().toString());
+		
 		return jwsObject.getPayload().toJSONObject();
 
 	}

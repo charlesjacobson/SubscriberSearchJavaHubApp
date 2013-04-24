@@ -25,6 +25,7 @@ public class MainServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// redirect to main application page
 		getServletContext().getRequestDispatcher("/WEB-INF/jsp/main.jsp").forward(request, response);
 	}
 
