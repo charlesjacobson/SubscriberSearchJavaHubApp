@@ -64,8 +64,7 @@ public class SubscriberUpdateServlet extends HttpServlet {
         
         String result = "{\"success\":\"true\"}";
         
-        if (results == null || 
-        		results.size() < 1 || 
+        if (results == null || results.size() < 1 || 
         		!results.get(0).getStatusCode().equalsIgnoreCase("OK")) {
         	
         	result.replace("true", "false");
